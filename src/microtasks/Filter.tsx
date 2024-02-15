@@ -1,58 +1,64 @@
 import React, {useState} from 'react';
+import NewComponent from "./NewComponent";
 
 
 
-type typeBanknots = {
-  banknots: 'ALL' | 'RUB' | 'USD'
+export type BanknotsType = 'ALL' | 'RUB' | 'USD';
+
+
+export type MoneysObjType = {
+  myMoney: MoneyType[];
 }
 
+export type MoneyType = {
+  banknots: string;
+  value: number;
+  number: string;
+}
 
 const Filter = () => {
 
-  const [money, setMoney] = useState([
-    { banknots: 'Dollars', value: 100, number: ' a1234567890' },
-    { banknots: 'Dollars', value: 50, number: ' z1234567890' },
-    { banknots: 'RUBLS', value: 100, number: ' w1234567890' },
-    { banknots: 'Dollars', value: 100, number: ' e1234567890' },
-    { banknots: 'Dollars', value: 50, number: ' c1234567890' },
-    { banknots: 'RUBLS', value: 100, number: ' r1234567890' },
-    { banknots: 'Dollars', value: 50, number: ' x1234567890' },
-    { banknots: 'RUBLS', value: 50, number: ' v1234567890' },
-  ])
+  let [moneys, setMoneys]  = useState<MoneysObjType>(
+    {
+      myMoney: [
+        { banknots: 'Dollars', value: 100, number: ' a1234567890' },
+        { banknots: 'Dollars', value: 50, number: ' z1234567890' },
+        { banknots: 'RUBLS', value: 100, number: ' w1234567890' },
+        { banknots: 'Dollars', value: 100, number: ' e1234567890' },
+        { banknots: 'Dollars', value: 50, number: ' c1234567890' },
+        { banknots: 'RUBLS', value: 100, number: ' r1234567890' },
+        { banknots: 'Dollars', value: 50, number: ' x1234567890' },
+        { banknots: 'RUBLS', value: 50, number: ' v1234567890' },
+      ]
+    }
+  )
 
-  const [filter, setFilter] = useState('ALL')
+  const [filter, setFilter] = useState<BanknotsType>('ALL')
 
-  let currentMoney = money;
+  let filteredMoney = moneys.myMoney
 
-  if (filter === 'RUBLS') {
-    currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'RUBLS')
-  } else if (filter === 'Dollars'){
-    currentMoney = money.filter((filteredMoney) => filteredMoney.banknots === 'Dollars')
+  if (filter !== 'RUB' && filter !== 'USD') {
+    let filteredMoney = moneys.myMoney
+
+  } else
+
+  if (filter === 'RUB') {
+    filteredMoney = moneys.myMoney.filter(f => f.banknots === 'RUBLS')
+    console.log('RUBLS')
+  } else if (filter === 'USD'){
+    filteredMoney = moneys.myMoney.filter(f => f.banknots === 'Dollars')
+    console.log('USD')
+
   }
 
-  const onClickFilterHundler = (nameButton:string) => {
-        setFilter(nameButton)
+
+  const changeFilter = (filter: BanknotsType) => {
+    setFilter(filter)
+    console.log('click')
   }
 
   return (
-    <div>
-      <ul>
-
-        {currentMoney.map((objFromMoneyArr, index) => {
-          return (
-            <li key={index}>
-              <span>{objFromMoneyArr.banknots}</span>
-              <span>{objFromMoneyArr.value}</span>
-              <span>{objFromMoneyArr.number}</span>
-            </li>
-          )
-        })}
-
-      </ul>
-      <button onClick={() => onClickFilterHundler('ALL')}>All</button>
-      <button onClick={() => onClickFilterHundler('RUBLS')}>RUB</button>
-      <button onClick={() => onClickFilterHundler('Dollars')}>USD</button>
-    </div>
+    <NewComponent changeFilter={changeFilter} moneys={moneys}/>
   );
 };
 
